@@ -4,50 +4,39 @@ import Users from "./Users"
 
 function App() {
   const managers = []
-  const managerUser = Users.map(user => {
+  Users.map(user => {
     user.manager && managers.push(user)
     return (
-      managers.map(manager => {
-        // console.log(manager)
-        return (
-          {
-            email: manager.email,
-            password: manager.password,
-            manager: true
-          }
-        )
-      })
+      managers
     )
   })
 
   const operators = []
-  const operatorUser = Users.map(user => {
+  Users.map(user => {
     !user.manager && operators.push(user)
     return (
-      operators.map(operator => {
-        // console.log(operator)
-        return (
-          {
-            email: operator.email,
-            password: operator.password,
-            manager: false
-          }
-        )
-      })
+      operators
     )
   })
-
 
   const [user, setUser] = useState({name: "", email: ""});
   const [error, setError] = useState("");
 
   const Login = details => {
     console.log(details);
-    if (details.email === managerUser.email && details.password === managerUser.password) {
+
+    if (details.email === managers.find(manager => manager.email).email && details.password === managers.find(manager => manager.password).password) {
       console.log("Logged in")
       setUser({
         name: details.name,
-        email: details.email
+        email: details.email,
+        manager: true
+      });
+    } else if (details.email === operators.find(operator => operator.email).email && details.password === operators.find(operator => operator.password).password) {
+      setUser({
+        name: details.name,
+        email: details.email,
+        manager: false
       });
     } else {
       console.log("Details do not match!")
@@ -61,10 +50,15 @@ function App() {
 
   return (
     <div className="App">
-      {(user.email != "") ? (
-        <div>
-          <h2>Welcome, <span>{user.name}</span>!</h2>
-          <button onClick={Logout}>Logout</button>
+      {(user.email !== "") ? (
+        <div>{
+          user.manager ? (
+            <h2>Welcome, Manager <span>{user.name}</span>!</h2>
+          ) : (
+            <h2>Welcome, Operator <span>{user.name}</span>!</h2>
+          )
+        }
+        <button onClick={Logout}>Logout</button>
         </div>
       ) : (
         <LoginForm login={Login} error={error} />
