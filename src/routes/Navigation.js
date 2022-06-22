@@ -39,6 +39,9 @@ function Navigation() {
           if(error.code === 'auth/user-not-found'){
             toast.error('Please check the Email');
           }
+          if(error.code === 'auth/invalid-email'){
+            toast.error('Please enter a valid Email');
+          }
         })
     }
 
@@ -50,6 +53,9 @@ function Navigation() {
       }).catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
           toast.error('Email Already in Use');
+        }
+        if(error.code === 'auth/invalid-email'){
+          toast.error('Please enter a valid Email');
         }
       })
    }
