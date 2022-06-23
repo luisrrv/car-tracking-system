@@ -2,7 +2,9 @@ import React from 'react'
 
 function OperatorNav() {
   return (
-    <nav>OperatorNav</nav>
+    <nav>
+      OperatorNav
+    </nav>
   )
 }
 

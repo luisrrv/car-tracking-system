@@ -1,13 +1,13 @@
 import React from 'react'
 import ManagerNav from './ManagerNav'
 
-function City() {
+function Report() {
   return (
     <div>
       <ManagerNav />
-      <h1>Cities</h1>
+      <h1>Report</h1>
     </div>
   )
 }
 
-export default City
+export default Report

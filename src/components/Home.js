@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Button from '@mui/material/Button';
+import ManagerNav from './manager/ManagerNav'
 // import LoginForm from "./LoginForm"
 // import Users from "../Users"
 // import ManagerNav from "./manager/ManagerNav"
@@ -10,10 +8,6 @@ import Button from '@mui/material/Button';
 
 
 function Home() {
-  const handleLogout = () => {
-    sessionStorage.removeItem('Auth Token');
-    navigate('/login')
-}
 
   let navigate = useNavigate();
   useEffect(() => {
@@ -29,10 +23,8 @@ function Home() {
   }, [])
   return (
       <div>
-          Home Page
-
-          <Button variant="outlined" onClick={handleLogout}>Log out </Button>
-
+        <ManagerNav />
+          <h1>Car Tracking System</h1>
       </div>
   )
 }

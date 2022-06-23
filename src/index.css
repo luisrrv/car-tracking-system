@@ -14,3 +14,14 @@ code {
 .App {
   text-align: center;
 }
+.MuiPaper-root {
+  display: flex;
+  flex-direction: row;
+}
+.css-e53awj-MuiStack-root {
+  justify-content: center;
+}
+.form--title {
+  font-size: 12px;
+  margin-bottom: 0;
+}

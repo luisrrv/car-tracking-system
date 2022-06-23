@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Form from '../components/common/Form'
 import Home from '../components/Home'
+import City from '../components/manager/City'
+import Car from '../components/manager/Car'
+import Users from '../components/manager/Users'
+import Report from '../components/manager/Report'
+import Tracking from '../components/manager/Tracking'
 import { app } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -86,6 +91,26 @@ function Navigation() {
           <Route path='/'
             element={<Home />}
           />
+          <Route path="/cities"
+            element={
+              <City />
+            } />
+          <Route path="/cars"
+            element={
+              <Car />
+            } />
+          <Route path="/users"
+            element={
+              <Users />
+            } />
+          <Route path="/report"
+            element={
+              <Report />
+            } />
+          <Route path="/tracking"
+            element={
+              <Tracking />
+            } />
         </Routes>
     </div>
   )
