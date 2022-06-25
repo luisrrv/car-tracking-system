@@ -54,3 +54,8 @@ code {
 .hide {
   display: none;
 }
+.users--subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
