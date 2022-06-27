@@ -54,8 +54,18 @@ code {
 .hide {
   display: none;
 }
+.show {
+  display: block;
+}
 .users--subtitle {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+.addtocity {
+  display: none;
+}
+.add-to-city-form {
+  display: flex;
   align-items: center;
 }

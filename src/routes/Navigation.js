@@ -9,7 +9,7 @@ import Tracking from '../components/manager/Tracking'
 import { app } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, setCustomUserClaims } from 'firebase/auth'
 import {
   Routes,
   Route,
@@ -30,11 +30,13 @@ function Navigation() {
 
   const handleAction = (id) => {
     const authentication = getAuth();
+
     createUserWithEmailAndPassword(authentication, email, password)
 
     if (id === 1) {
       signInWithEmailAndPassword(authentication, email, password)
         .then((response) => {
+          console.log(response);
           navigate('/')
           sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
         }).catch((error) => {
@@ -53,6 +55,7 @@ function Navigation() {
     if (id === 2) {
       createUserWithEmailAndPassword(authentication, email, password)
         .then((response) => {
+          authentication.setCustomUserClaims(email, {papas: true})
           navigate('/')
           sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
       }).catch((error) => {

@@ -17,29 +17,30 @@ function Users() {
 
   const [newName, setNewName] = useState("")
   const [newCar, setNewCar] = useState("")
-  const [newCity, setNewCity] = useState("")
+  // const [newCity, setNewCity] = useState("")
   const [users, setUsers] = useState([]);
   const [cities, setCities] = useState([]);
-  const usersCollectionRef = collection(db, "users");
+  const usersCollectionRef = collection(db, "operators");
   const citiesCollectionRef = collection(db, "cities");
 
 
   const createUser = async () => {
-      await addDoc(usersCollectionRef, {name: newName, car_id: newCar, city_id: newCity, type: "Operator"})
+      await addDoc(usersCollectionRef, {name: newName, car: newCar, code: ""})
       const data = await getDocs(usersCollectionRef);
+      console.log(data);
       setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
   };
 
-  const updateUser = async (id, name, car_id, city_id) => {
-    const userDoc = doc(db, "users", id);
-    const newFields = {name: name, car_id: car_id, city_id: city_id};
+  const updateUser = async (id, name, car) => {
+    const userDoc = doc(db, "operators", id);
+    const newFields = {name: name, car_id: car};
     await updateDoc(userDoc, newFields);
     const data = await getDocs(usersCollectionRef);
     setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
   };
 
   const deleteUser = async (id) => {
-    const userDoc = doc(db, "users", id);
+    const userDoc = doc(db, "operators", id);
     await deleteDoc(userDoc);
     const data = await getDocs(usersCollectionRef);
     setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
@@ -53,7 +54,7 @@ function Users() {
     }
 
     getUsers()
-  });
+  }, []);
 
   useEffect(() => {
     const getCities = async () => {
@@ -76,8 +77,8 @@ function Users() {
   return (
     <div>
       <ManagerNav />
-      <h1>USERS</h1>
-      <h2 className='users--subtitle'>OPERATORS<span><Button onClick={() => {newForm.classList.toggle("hide")}} className='form--title'><AiOutlinePlus style={{fontSize: "20px"}} /></Button></span></h2>
+      {/* <h1>USERS</h1> */}
+      <h1 className='users--subtitle'>OPERATORS<span><Button onClick={() => {newForm.classList.toggle("hide")}} className='form--title'><AiOutlinePlus style={{fontSize: "20px"}} /></Button></span></h1>
       <div className="new-user-form hide">
         <Box
           component="form"
@@ -94,12 +95,12 @@ function Users() {
             onChange={(e) => setNewName(e.target.value)}
           />
           <TextField
-            id="car_id"
+            id="car"
             label="Assigned car"
             variant="outlined"
             onChange={(e) => setNewCar(e.target.value)}
           />
-          <InputLabel
+          {/* <InputLabel
             id="city_id"
           >Assigned city</InputLabel>
           <Select
@@ -110,7 +111,7 @@ function Users() {
             onChange={(e) => setNewCity(e.target.value)}
           >
             {allCities}
-          </Select>
+          </Select> */}
         </Box>
         <Button variant="contained" onClick={createUser}>Add</Button>
         <Button onClick={() => {newForm.classList.toggle("hide")}} className='form--title'><AiFillCloseCircle style={{fontSize: "20px"}} /></Button>
@@ -147,24 +148,24 @@ function Users() {
                   placeholder={user.car_id}
                   onChange={(e) => setNewCar(e.target.value)}
                 />
-                <TextField
+                {/* <TextField
                   size='small'
                   id="city_id"
                   label="Assigned city"
                   variant="outlined"
                   placeholder={user.city_id}
                   onChange={(e) => setNewCity(e.target.value)}
-                />
+                /> */}
               </Box>
               <div className="edit--btns">
-                <Button variant="contained" onClick={() => {updateUser(user.id, newName, newCar, newCity); document.querySelector(`.edit${user.id}`).style.display = "none";  document.querySelector(`.user--info${user.id}`).style.display = "block"}}>Add</Button>
+                <Button variant="contained" onClick={() => {updateUser(user.id, newName, newCar); document.querySelector(`.edit${user.id}`).style.display = "none";  document.querySelector(`.user--info${user.id}`).style.display = "block"}}>Update</Button>
                 <Button onClick={() => {document.querySelector(`.edit${user.id}`).style.display = "none";  document.querySelector(`.user--info${user.id}`).style.display = "block"}}><AiFillCloseCircle style={{fontSize: "20px"}} /></Button>
               </div>
             </div>
               <div className={`user--info${user.id}`}>
                 <h3>{user.name ? user.name : "no name :("} </h3>
                 <p>Car: {user.car_id ? user.car_id : "Not assigned :("}</p>
-                <p>City: {user.city_id ? user.city_id : "Not assigned :("}</p>
+                {/* <p>City: {user.city_id ? user.city_id : "Not assigned :("}</p> */}
                 <span><Button onClick={() => {document.querySelector(`.edit${user.id}`).style.display = "block"; document.querySelector(`.user--info${user.id}`).style.display = "none"}} style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}><BiEdit /></Button></span><span><Button onClick={() => {deleteUser(user.id)}} style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}><AiFillDelete /></Button></span>
               </div>
             </div>
