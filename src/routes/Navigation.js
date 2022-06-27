@@ -6,10 +6,12 @@ import Car from '../components/manager/Car'
 import Users from '../components/manager/Users'
 import Report from '../components/manager/Report'
 import Tracking from '../components/manager/Tracking'
-import { app } from '../firebase-config';
+import OperatorNav from '../components/operator/OperatorNav'
+import { app, db } from '../firebase-config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, setCustomUserClaims } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword} from 'firebase/auth'
+import { collection, getDocs, doc } from 'firebase/firestore'
 import {
   Routes,
   Route,
@@ -27,13 +29,16 @@ function Navigation() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
+  const [operatorCode, setOperatorCode] = useState('')
+  const [operators, setOperators] = useState([]);
+  const usersCollectionRef = collection(db, "operators");
 
-  const handleAction = (id) => {
-    const authentication = getAuth();
+  const handleAction = (role) => {
+    if (role === "manager") {
+      const authentication = getAuth();
 
-    createUserWithEmailAndPassword(authentication, email, password)
+      createUserWithEmailAndPassword(authentication, email, password)
 
-    if (id === 1) {
       signInWithEmailAndPassword(authentication, email, password)
         .then((response) => {
           console.log(response);
@@ -51,23 +56,27 @@ function Navigation() {
           }
         })
     }
+    else {
+      const filteredOperator = operators.filter(operator => operator.code === operatorCode)
+      // console.log(filteredOperator[0].code);
+      if (filteredOperator.length === 0) {
+        toast.error('Operator not found');
+      }
+      else if (filteredOperator[0].code === operatorCode) {
+        navigate("/navigation")
+      }
 
-    if (id === 2) {
-      createUserWithEmailAndPassword(authentication, email, password)
-        .then((response) => {
-          authentication.setCustomUserClaims(email, {papas: true})
-          navigate('/')
-          sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
-      }).catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          toast.error('Email Already in Use');
-        }
-        if(error.code === 'auth/invalid-email'){
-          toast.error('Please enter a valid Email');
-        }
-      })
-   }
+    }
   }
+
+  useEffect(() => {
+    const getOperators = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setOperators(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+    }
+
+    getOperators()
+  }, []);
 
   const navigate = useNavigate();
 
@@ -75,21 +84,20 @@ function Navigation() {
     <div>
       <ToastContainer />
         <Routes>
-          <Route path='/login'
+          <Route path='/Manager-login'
             element={
               <Form
-                title="Login"
+                title="Manager login"
                 setEmail={setEmail}
                 setPassword={setPassword}
-                handleAction={() => handleAction(1)} />}
+                handleAction={() => handleAction("manager")} />}
           />
-          <Route path='/register'
+          <Route path='/Operator-login'
             element={
               <Form
-                title="Register"
-                setEmail={setEmail}
-                setPassword={setPassword}
-                handleAction={() => handleAction(2)} />}
+                title="Operator Login"
+                setOperatorCode={setOperatorCode}
+                handleAction={() => handleAction("operator")} />}
           />
           <Route path='/'
             element={<Home />}
@@ -113,6 +121,10 @@ function Navigation() {
           <Route path="/tracking"
             element={
               <Tracking />
+            } />
+          <Route path="/navigation"
+            element={
+              <OperatorNav />
             } />
         </Routes>
     </div>

@@ -9,7 +9,7 @@ import { AiFillCar } from 'react-icons/ai'
 function Navbar() {
   const handleLogout = () => {
     sessionStorage.removeItem('Auth Token');
-    navigate('/login')
+    navigate('/Manager-login')
 }
 
 let navigate = useNavigate();

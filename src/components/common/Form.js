@@ -5,7 +5,7 @@ import Btn from '@mui/material/Button';
 import Button from './Button';
 import { useNavigate } from "react-router-dom";
 
-export default function BasicTextFields({title, setPassword, setEmail, handleAction}) {
+export default function BasicTextFields({title, setPassword, setEmail, setOperatorCode, handleAction}) {
   const navigate = useNavigate();
   console.log(title)
     return (
@@ -19,27 +19,46 @@ export default function BasicTextFields({title, setPassword, setEmail, handleAct
             <Box
                 component="form"
                 sx={{
-                    '& > :not(style)': { m: 1, width: '25ch' },
+                    '& > :not(style)': { m: 1 },
                 }}
                 noValidate
                 autoComplete="off"
             >
-                <TextField
-                  id="email"
-                  label="Email"
+              {title === "Manager login" ?
+              <div className='manager-login-form'>
+              <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                id="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              </div>
+            :
+            <TextField
+                  id="code"
+                  label="Login code"
                   variant="outlined"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setOperatorCode(e.target.value)}
                 />
-                <TextField
-                  id="password"
-                  label="Password"
-                  variant="outlined"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+
+            }
+
             </Box>
 
+            {title === "Manager login" ?
             <Button title={title} handleAction={handleAction}/>
-            <Btn onClick={() => {navigate(`/${title === "Register" ? "login" : "register"}`)}}>{title === "Register" ? "Login" : "Register"}</Btn>
+            :
+            <Button title={title} handleAction={handleAction}/>
+            }
+          <Btn onClick={() => {navigate(`/${title === "Operator Login" ? "Manager-login" : "Operator-login"}`)}}>{title === "Operator Login" ? "Manager Login" : "Operator Login"}</Btn>
         </div>
     );
 }

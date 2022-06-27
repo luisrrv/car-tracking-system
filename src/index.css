@@ -69,3 +69,15 @@ code {
   display: flex;
   align-items: center;
 }
+.disabled {
+  pointer-events: none;
+  /* background-color: gray;
+  border-color: gray; */
+  opacity: 0.5;
+}
+.manager-login-form {
+  display: flex;
+  max-width: 100%;
+  justify-content: center;
+  gap: 8px;
+}

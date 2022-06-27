@@ -18,7 +18,7 @@ function Home() {
     }
 
     if (!authToken) {
-      navigate('login')
+      navigate('/Manager-login')
     }
   }, [])
   return (

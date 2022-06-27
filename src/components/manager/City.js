@@ -40,13 +40,33 @@ function City() {
     const data = await getDocs(citiesCollectionRef);
     setCities(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
   };
+  const updateOperatorCode = async (id, code, car) => {
+    const operatorDoc = doc(db, "operators", id);
+    const newFields = {code: code, car: car};
+    console.log(car);
+    await updateDoc(operatorDoc, newFields);
+  };
+  // const updateOperatorCar = async (id, car) => {
+  //   const operatorDoc = doc(db, "operators", id);
+  //   const newFields = {car: car.id};
+  //   await updateDoc(operatorDoc, newFields);
+  // };
+
+  const disableButton = () => {
+    const assignToCityBtn = document.querySelector(".assign-to-city-btn");
+    assignToCityBtn.classList.add("disabled");
+    setTimeout(() => {
+      assignToCityBtn.classList.remove("disabled");
+    }, 1000);
+  }
 
   const assignToCity = async (id, car, operator) => {
     const cityDoc = doc(db, "cities", id);
-    const newFields = {car: car.id, operator: operator.id};
+    const newFields = {car: car.id};
     await updateDoc(cityDoc, newFields);
     const data = await getDocs(citiesCollectionRef);
     setCities(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+    disableButton();
   }
 
   const deleteCity = async (id) => {
@@ -109,6 +129,16 @@ function City() {
   const papas2 = (e) => {
     setNewOperator(e.target.value)
   }
+
+  const createCode = (id, car) => {
+    const randNumber = Math.round((new Date()).getTime() / 1000);
+    console.log(randNumber);
+    const code = String(randNumber).slice(-6);
+    const filteredOperator = operators.filter(operator => operator.id === id);
+    filteredOperator.code = code;
+    updateOperatorCode(id, filteredOperator.code, newCar.id)
+  }
+
 
   const newForm = document.querySelector(".new-user-form")
   const addForm = document.querySelector(".addtocity")
@@ -191,7 +221,7 @@ function City() {
                   // placeholder={city.operator}
                   onChange={(e) => setNewName(e.target.value)}
                 /> */}
-                <Button onClick={() => {assignToCity(newEditingCity.id, newCar, newOperator)}} variant="contained">Add</Button>
+                <Button className='assign-to-city-btn' onClick={() => {assignToCity(newEditingCity.id, newCar, newOperator); createCode(newOperator.id, newOperator.car)}} variant="contained">Add</Button>
               </Box>
               </div>
         <div className='cards'>
